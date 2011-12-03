@@ -25,3 +25,7 @@ td {
 .notpresent {
   background-color: #fff;
 }
+.empty {
+  text-align: center;
+  font-size: smaller;
+}

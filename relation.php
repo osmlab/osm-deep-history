@@ -26,7 +26,8 @@ $xml = simplexml_load_string($output);
 
 $relations = array();
 $tag_keys = array();
-foreach ($xml->way as $way_xml) {
+$relation_refs = array();
+foreach ($xml->relation as $way_xml) {
   $version = (integer) $way_xml->attributes()->version;
   $way['changeset'] = (integer) $way_xml->attributes()->changeset;
   $way['user'] = (string) $way_xml->attributes()->user;
@@ -41,6 +42,16 @@ foreach ($xml->way as $way_xml) {
     $tag_keys[$k] = true;
   }
   $way['tags'] = $tags;
+
+  $members = array();
+  foreach ($way_xml->member as $member_xml) {
+    $role = (string) $member_xml->attributes()->role;
+    $type = (string) $member_xml->attributes()->type;
+    $ref = (string) $member_xml->attributes()->ref;
+    $relation_refs["$type,$ref"] = true;
+    $members["$type,$ref"] = $role;
+  }
+  $way['members'] = $members;
   
   $relations[$version] = $way;
 }
@@ -52,7 +63,7 @@ foreach ($xml->way as $way_xml) {
   <link rel='stylesheet' type='text/css' media='screen,print' href='style.css'/>
 </head>
 <body>
-  <h3>Way ID <? echo $id ?></h3>
+  <h3>Relation ID <? echo $id ?></h3>
   <hr />
 
   <table>
@@ -69,6 +80,15 @@ foreach ($xml->way as $way_xml) {
     <?
 foreach (array_keys($tag_keys) as $key) {
   print tagLine($relations, $key, $key);
+}
+    ?>
+    <tr>
+      <td style='background:#ccc;' colspan='<? echo count($relations) + 1 ?>'>Members</td>
+    </tr>
+    <?
+foreach (array_keys($relation_refs) as $key) {
+  list($type, $ref) = split(',', $key);
+  print memberLine($relations, $type, $ref);
 }
     ?>
   </table>
