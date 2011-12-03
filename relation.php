@@ -57,14 +57,14 @@ foreach ($xml->way as $way_xml) {
 
   <table>
     <tr>
-      <td style='background:#ccc;' colspan='100'>Primitive Info</td>
+      <td style='background:#ccc;' colspan='<? echo count($relations) + 1 ?>'>Primitive Info</td>
     </tr>
 
     <? echo timeLine($relations) ?>
     <? echo wayLine($relations, 'changeset', true, "Changeset#") ?>
     <? echo wayLine($relations, 'user', true, "User") ?>
     <tr>
-      <td style='background:#ccc;' colspan='100'>Tags</td>
+      <td style='background:#ccc;' colspan='<? echo count($relations) + 1 ?>'>Tags</td>
     </tr>
     <?
 foreach (array_keys($tag_keys) as $key) {

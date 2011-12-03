@@ -96,7 +96,7 @@ foreach($nodes as $n) {
     </tr>
     
     <tr>
-      <td style='background:#ccc;' colspan='100'>Primitive Info</td>
+      <td style='background:#ccc;' colspan='<? echo count($nodes) + 1 ?>'>Primitive Info</td>
     </tr>
 
     <? echo timeLine($nodes) ?>
@@ -105,7 +105,7 @@ foreach($nodes as $n) {
     <? echo wayLine($nodes, 'lat', true, "Lat") ?>
     <? echo wayLine($nodes, 'lon', true, "Lon") ?>
     <tr>
-      <td style='background:#ccc;' colspan='100'>Tags</td>
+      <td style='background:#ccc;' colspan='<? echo count($nodes) + 1 ?>'>Tags</td>
     </tr>
     <?
 foreach (array_keys($tag_keys) as $key) {

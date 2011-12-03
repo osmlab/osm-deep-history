@@ -104,7 +104,7 @@ foreach($ways as $n) {
     </tr>
 
     <tr>
-      <td style='background:#ccc;' colspan='100'>Primitive Info</td>
+      <td style='background:#ccc;' colspan='<? echo count($ways) + 1 ?>'>Primitive Info</td>
     </tr>
 
     <? echo timeLine($ways) ?>
@@ -119,7 +119,7 @@ foreach (array_keys($tag_keys) as $key) {
 }
     ?>
     <tr>
-      <td style='background:#ccc;' colspan='100'>Nodes</td>
+      <td style='background:#ccc;' colspan='<? echo count($ways) + 1 ?>'>Nodes</td>
     </tr>
     <?
 foreach (array_keys($way_refs) as $ref) {
