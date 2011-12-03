@@ -111,7 +111,7 @@ foreach($ways as $n) {
     <? echo wayLine($ways, 'changeset', true, "Changeset#") ?>
     <? echo wayLine($ways, 'user', true, "User") ?>
     <tr>
-      <td style='background:#ccc;' colspan='100'>Tags</td>
+      <td style='background:#ccc;' colspan='<? echo count($ways) + 1 ?>'>Tags</td>
     </tr>
     <?
 foreach (array_keys($tag_keys) as $key) {
