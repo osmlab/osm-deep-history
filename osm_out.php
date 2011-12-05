@@ -17,17 +17,16 @@ function color($prev, $curr) {
 }
 
 function refLine($ways, $ref) {
-  $ret = "<tr>\n";
+  $ret = "<tr>";
   $previousVal = "----";
   $i = 0;
   
-  $ret .= "<td style='background:#ccc;'><a href='node.php?id=$ref'>$ref</a></td>";
+  $ret .= "<td style='background:#ccc;'><img src='node.png'/><a href='node.php?id=$ref'>$ref</a></td>";
 
   foreach ($ways as $way) {
     $refs = $way['refs'];
     if(!array_key_exists($ref, $refs)) {
       $currentVal = "----";
-      $ret .= "<td class='$class'>&nbsp;</td>";
     } else {
       $currentVal = $ref[$ref];
     }
@@ -68,11 +67,11 @@ function memberLine($relations, $type, $ref) {
 }
 
 function tagLine($ways, $key, $title) {
-  $ret = "<tr>\n";
+  $ret = "<tr>";
   $previousVal = "----";
   $i = 0;
   
-  $ret .= "<td style='background:#ccc;'>$title</td>";
+  $ret .= "<td style='background:#ccc;'><img src='tag.png'/>$title</td>";
 
   foreach ($ways as $way) {
     $tags = $way['tags'];

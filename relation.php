@@ -68,14 +68,14 @@ foreach ($xml->relation as $way_xml) {
 
   <table>
     <tr>
-      <td style='background:#ccc;' colspan='<? echo count($relations) + 1 ?>'>Primitive Info</td>
+      <td style='background:#aaa;' colspan='<? echo count($relations) + 1 ?>'>Primitive Info</td>
     </tr>
 
     <? echo timeLine($relations) ?>
     <? echo wayLine($relations, 'changeset', true, "Changeset#") ?>
     <? echo wayLine($relations, 'user', true, "User") ?>
     <tr>
-      <td style='background:#ccc;' colspan='<? echo count($relations) + 1 ?>'>Tags</td>
+      <td style='background:#aaa;' colspan='<? echo count($relations) + 1 ?>'>Tags</td>
     </tr>
     <?
 foreach (array_keys($tag_keys) as $key) {
@@ -83,7 +83,7 @@ foreach (array_keys($tag_keys) as $key) {
 }
     ?>
     <tr>
-      <td style='background:#ccc;' colspan='<? echo count($relations) + 1 ?>'>Members</td>
+      <td style='background:#aaa;' colspan='<? echo count($relations) + 1 ?>'>Members</td>
     </tr>
     <?
 foreach (array_keys($relation_refs) as $key) {

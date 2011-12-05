@@ -104,14 +104,14 @@ foreach($ways as $n) {
     </tr>
 
     <tr>
-      <td style='background:#ccc;' colspan='<? echo count($ways) + 1 ?>'>Primitive Info</td>
+      <td style='background:#aaa;' colspan='<? echo count($ways) + 1 ?>'>Primitive Info</td>
     </tr>
 
     <? echo timeLine($ways) ?>
     <? echo wayLine($ways, 'changeset', true, "Changeset#") ?>
     <? echo wayLine($ways, 'user', true, "User") ?>
     <tr>
-      <td style='background:#ccc;' colspan='<? echo count($ways) + 1 ?>'>Tags</td>
+      <td style='background:#aaa;' colspan='<? echo count($ways) + 1 ?>'>Tags</td>
     </tr>
     <?
 foreach (array_keys($tag_keys) as $key) {
@@ -119,7 +119,7 @@ foreach (array_keys($tag_keys) as $key) {
 }
     ?>
     <tr>
-      <td style='background:#ccc;' colspan='<? echo count($ways) + 1 ?>'>Nodes</td>
+      <td style='background:#aaa;' colspan='<? echo count($ways) + 1 ?>'>Nodes</td>
     </tr>
     <?
 foreach (array_keys($way_refs) as $ref) {
