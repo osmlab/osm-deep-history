@@ -16,6 +16,34 @@ function color($prev, $curr) {
   }
 }
 
+function agreed($uid) {
+  if($uid >= 286582) {
+    return 'agreed';
+  } else if(findInFile('users_disagreed.txt', $uid)) {
+    return 'disagreed';
+  } else if(findInFile('users_agreed.txt', $uid)) {
+    return 'agreed';
+  } else {
+    return 'nodecision';
+  }
+}
+
+function findInFile($file, $needle) {
+  $data = file($file);
+
+  $top = sizeof($data) - 1;
+  $bottom = 0;
+
+  while($top >= $bot) {
+    $p = floor(($top + $bot) / 2);
+    if((int) $data[$p] < $needle) $bot = $p + 1;
+    else if((int) $data[$p] > $needle) $top = $p - 1;
+    else return TRUE;
+  }
+
+  return FALSE;
+}
+
 function refLine($ways, $ref) {
   $ret = "<tr>";
   $previousVal = "----";
@@ -97,7 +125,7 @@ function tagLine($ways, $key, $title) {
 }
 
 function timeLine($ways) {
-  $ret = "<tr>\n";
+  $ret = "<tr>";
   $ret .= "<td style='background:#ccc;'>Time</td>";
   foreach ($ways as $way) {
     $currentVal = $way['time'];
@@ -108,7 +136,7 @@ function timeLine($ways) {
 }
 
 function wayLine($ways, $val, $useColor=true, $title) {
-  $ret = "<tr>\n";
+  $ret = "<tr>";
   $previousVal = "----";
   $ret .= "<td style='background:#ccc;'>$title</td>";
   foreach ($ways as $way) {
@@ -116,6 +144,17 @@ function wayLine($ways, $val, $useColor=true, $title) {
     $class = color($previousVal, $currentVal);
     $ret .= "<td class='$class'>$currentVal</td>";
     $previousVal = $currentVal;
+  }
+  $ret .= "</tr>\n";
+  return $ret;
+}
+
+function licenseLine($ways) {
+  $ret = "<tr>";
+  $ret .= "<td style='background:#ccc;'>Status</td>";
+  foreach ($ways as $way) {
+    $class = agreed($way['uid']);
+    $ret .= "<td class='$class empty'>$class</td>";
   }
   $ret .= "</tr>\n";
   return $ret;

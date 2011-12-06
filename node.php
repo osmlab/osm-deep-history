@@ -105,6 +105,10 @@ foreach($nodes as $n) {
     <? echo wayLine($nodes, 'lat', true, "Lat") ?>
     <? echo wayLine($nodes, 'lon', true, "Lon") ?>
     <tr>
+      <td style='background:#aaa;' colspan='<? echo count($nodes) + 1 ?>'>License Status</td>
+    </tr>
+<? echo licenseLine($nodes) ?>
+    <tr>
       <td style='background:#aaa;' colspan='<? echo count($nodes) + 1 ?>'>Tags</td>
     </tr>
     <?

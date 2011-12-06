@@ -29,3 +29,13 @@ td {
   text-align: center;
   font-size: smaller;
 }
+
+.agreed {
+  background-color: #cfc;
+}
+.disagreed {
+  background-color: #fcc;
+}
+.undecided {
+  background-color: #ff9;
+}

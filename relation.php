@@ -75,6 +75,10 @@ foreach ($xml->relation as $way_xml) {
     <? echo wayLine($relations, 'changeset', true, "Changeset#") ?>
     <? echo wayLine($relations, 'user', true, "User") ?>
     <tr>
+      <td style='background:#aaa;' colspan='<? echo count($relations) + 1 ?>'>License Status</td>
+    </tr>
+<? echo licenseLine($relations) ?>
+    <tr>
       <td style='background:#aaa;' colspan='<? echo count($relations) + 1 ?>'>Tags</td>
     </tr>
     <?

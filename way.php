@@ -111,6 +111,10 @@ foreach($ways as $n) {
     <? echo wayLine($ways, 'changeset', true, "Changeset#") ?>
     <? echo wayLine($ways, 'user', true, "User") ?>
     <tr>
+      <td style='background:#aaa;' colspan='<? echo count($ways) + 1 ?>'>License Status</td>
+    </tr>
+    <? echo licenseLine($ways) ?>
+    <tr>
       <td style='background:#aaa;' colspan='<? echo count($ways) + 1 ?>'>Tags</td>
     </tr>
     <?
