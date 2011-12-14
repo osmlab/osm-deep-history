@@ -72,8 +72,8 @@ foreach ($xml->relation as $way_xml) {
     </tr>
 
     <? echo timeLine($relations) ?>
-    <? echo wayLine($relations, 'changeset', true, "Changeset#") ?>
-    <? echo wayLine($relations, 'user', true, "User") ?>
+    <? echo wayLine($relations, 'changeset', true, "Changeset#", "http://osm.org/browse/changeset/") ?>
+    <? echo wayLine($relations, 'user', true, "User", "http://osm.org/user/") ?>
     <tr>
       <td style='background:#aaa;' colspan='<? echo count($relations) + 1 ?>'>License Status</td>
     </tr>

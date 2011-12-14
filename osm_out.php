@@ -135,14 +135,17 @@ function timeLine($ways) {
   return $ret;
 }
 
-function wayLine($ways, $val, $useColor=true, $title) {
+function wayLine($ways, $val, $useColor=true, $title, $link=Null) {
   $ret = "<tr>";
   $previousVal = "----";
   $ret .= "<td style='background:#ccc;'>$title</td>";
   foreach ($ways as $way) {
     $currentVal = $way[$val];
     $class = color($previousVal, $currentVal);
-    $ret .= "<td class='$class'>$currentVal</td>";
+    if($link)
+      $ret .= "<td class='$class'><a href='$link$currentVal'>$currentVal</a></td>";
+    else
+      $ret .= "<td class='$class'>$currentVal</td>";
     $previousVal = $currentVal;
   }
   $ret .= "</tr>\n";

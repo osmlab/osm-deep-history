@@ -108,8 +108,8 @@ foreach($ways as $n) {
     </tr>
 
     <? echo timeLine($ways) ?>
-    <? echo wayLine($ways, 'changeset', true, "Changeset#") ?>
-    <? echo wayLine($ways, 'user', true, "User") ?>
+    <? echo wayLine($ways, 'changeset', true, "Changeset#", "http://osm.org/browse/changeset/") ?>
+    <? echo wayLine($ways, 'user', true, "User", "http://osm.org/user/") ?>
     <tr>
       <td style='background:#aaa;' colspan='<? echo count($ways) + 1 ?>'>License Status</td>
     </tr>

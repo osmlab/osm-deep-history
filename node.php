@@ -100,8 +100,8 @@ foreach($nodes as $n) {
     </tr>
 
     <? echo timeLine($nodes) ?>
-    <? echo wayLine($nodes, 'changeset', true, "Changeset#") ?>
-    <? echo wayLine($nodes, 'user', true, "User") ?>
+    <? echo wayLine($nodes, 'changeset', true, "Changeset#", "http://osm.org/browse/changeset/") ?>
+    <? echo wayLine($nodes, 'user', true, "User", "http://osm.org/user/") ?>
     <? echo wayLine($nodes, 'lat', true, "Lat") ?>
     <? echo wayLine($nodes, 'lon', true, "Lon") ?>
     <tr>
