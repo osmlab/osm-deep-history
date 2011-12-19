@@ -16,12 +16,20 @@ function color($prev, $curr) {
   }
 }
 
-function agreed($uid) {
+function userAgreed($uid) {
   if($uid >= 286582) {
     return 'agreed';
   } else if(findInFile('users_disagreed.txt', $uid)) {
     return 'disagreed';
   } else if(findInFile('users_agreed.txt', $uid)) {
+    return 'agreed';
+  } else {
+    return 'nodecision';
+  }
+}
+
+function changesetAgreed($changsetId) {
+  if(findInFile('anon_changesets_agreed.txt', $changesetId)) {
     return 'agreed';
   } else {
     return 'nodecision';
@@ -156,7 +164,11 @@ function licenseLine($ways) {
   $ret = "<tr>";
   $ret .= "<td style='background:#ccc;'>Status</td>";
   foreach ($ways as $way) {
-    $class = agreed($way['uid']);
+    if($way['uid']) {
+      $class = userAgreed($way['uid']);
+    } else {
+      $class = changesetAgreed($way['changeset']);
+    }
     $ret .= "<td class='$class empty'>$class</td>";
   }
   $ret .= "</tr>\n";
