@@ -111,7 +111,7 @@ foreach($ways as $n) {
     <? echo wayLine($ways, 'changeset', true, "Changeset#", "http://osm.org/browse/changeset/") ?>
     <? echo wayLine($ways, 'user', true, "User", "http://osm.org/user/") ?>
     <tr>
-      <td style='background:#aaa;' colspan='<? echo count($ways) + 1 ?>'>License Status</td>
+      <td style='background:#aaa;' colspan='<? echo count($ways) + 1 ?>'>License Status <small>(Last updated: <? echo date ("d-M-Y H:i", filemtime("users_agreed.txt")) ?>)</small></td>
     </tr>
     <? echo licenseLine($ways) ?>
     <tr>

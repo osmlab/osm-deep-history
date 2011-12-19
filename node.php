@@ -105,7 +105,7 @@ foreach($nodes as $n) {
     <? echo wayLine($nodes, 'lat', true, "Lat") ?>
     <? echo wayLine($nodes, 'lon', true, "Lon") ?>
     <tr>
-      <td style='background:#aaa;' colspan='<? echo count($nodes) + 1 ?>'>License Status</td>
+      <td style='background:#aaa;' colspan='<? echo count($nodes) + 1 ?>'>License Status <small>(Last updated: <? echo date ("d-M-Y H:i", filemtime("users_agreed.txt")) ?>)</small></td>
     </tr>
 <? echo licenseLine($nodes) ?>
     <tr>
