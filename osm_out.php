@@ -40,7 +40,7 @@ function findInFile($file, $needle) {
   $data = file($file);
 
   $top = sizeof($data) - 1;
-  $bottom = 0;
+  $bot = 0;
 
   while($top >= $bot) {
     $p = floor(($top + $bot) / 2);
