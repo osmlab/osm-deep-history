@@ -119,11 +119,13 @@ function tagLine($ways, $key, $title) {
       $currentVal = $way['tags'][$key];
       $shortVal = $currentVal;
       $class = color($previousVal, $currentVal);
-      $displayVal = str_replace(' ', '&#9251;', $currentVal);
       if(strlen($currentVal) > 20) {
-        $shortVal = substr($displayVal, 0, 20) . "&#8230;";
+        $shortVal = substr($currentVal, 0, 20) . "&#8230;";
+        $displayVal = str_replace(' ', '&#9251;', $currentVal);
+        $shortVal = str_replace(' ', '&#9251;', $shortVal);
         $ret .= "<td class='$class'><abbr title='$displayVal'>$shortVal</abbr></td>";
       } else {
+        $displayVal = str_replace(' ', '&#9251;', $currentVal);
         $ret .= "<td class='$class'>$displayVal</td>";
       }
     }
