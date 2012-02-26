@@ -48,6 +48,8 @@ foreach ($xml->node as $node_xml) {
   
   $nodes[$version] = $node;
 }
+
+header('Content-Type: text/html; charset=utf-8');
 ?>
 
 <head>

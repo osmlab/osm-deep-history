@@ -57,6 +57,7 @@ foreach ($xml->relation as $way_xml) {
   $relations[$version] = $way;
 }
 
+header('Content-Type: text/html; charset=utf-8');
 ?>
 
 <head>

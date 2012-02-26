@@ -56,6 +56,7 @@ foreach ($xml->way as $way_xml) {
   $ways[$version] = $way;
 }
 
+header('Content-Type: text/html; charset=utf-8');
 ?>
 
 <head>
