@@ -153,10 +153,12 @@ function wayLine($ways, $val, $useColor=true, $title, $link=Null) {
   foreach ($ways as $way) {
     $currentVal = $way[$val];
     $class = color($previousVal, $currentVal);
-    if($link)
-      $ret .= "<td class='$class'><a href='$link$currentVal'>$currentVal</a></td>";
-    else
+    if($link) {
+      $urlEncVal = rawurlencode($currentVal);
+      $ret .= "<td class='$class'><a href='$link$urlEncVal'>$currentVal</a></td>";
+    } else {
       $ret .= "<td class='$class'>$currentVal</td>";
+    }
     $previousVal = $currentVal;
   }
   $ret .= "</tr>\n";
