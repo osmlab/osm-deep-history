@@ -1,5 +1,21 @@
 var hist = require('../index.js');
 
+var map = L.map('map').setView([51.505, -0.09], 13);
+
+$(document).ready(function() {
+    var hash = document.location.hash;
+    if (hash) {
+        var match = /^#\/(node|way|relation)\/(\d*)/.exec(hash);
+        if (match) {
+            $('#type').val(match[1]);
+            $('#id').val(match[2]);
+            $('#go').click();
+        } else {
+            document.location.hash = "";
+        }
+    }
+});
+
 $('#go').click(function() {
     var type = $('#type').val(),
         id = +$('#id').val();
