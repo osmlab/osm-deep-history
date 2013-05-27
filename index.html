@@ -1,41 +1,36 @@
-<table>
-  <tr>
-    <form action='node.php'>
-      <td align='right'>
-        <label for='node'>Node ID:</label>
-      </td>
-      <td>
-        <input type='text' size='10' id='node' name='id' />
-      </td>
-      <td>
-        <input type='submit' value='Get History' />
-      </td>
-    </form>
-  </tr>
-  <tr>
-    <form action='way.php'>
-      <td align='right'>
-        <label for='way'>Way ID:</label>
-      </td>
-      <td>
-        <input type='text' size='10' id='way' name='id' />
-      </td>
-      <td>
-        <input type='submit' value='Get History' />
-      </td>
-    </form>
-  </tr>
-  <tr>
-    <form action='relation.php'>
-      <td align='right'>
-        <label for='relation'>Relation ID:</label>
-      </td>
-      <td>
-        <input type='text' size='10' id='relation' name='id' />
-      </td>
-      <td>
-        <input type='submit' value='Get History' />
-      </td>
-    </form>
-  </tr>
-</table>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OSM Deep History</title>
+    <meta charset='utf-8' />
+    <link rel='stylesheet' href='http://cdn.leafletjs.com/leaflet-0.5/leaflet.css' />
+    <link rel='stylesheet' href='css/style.css' />
+    <link rel='stylesheet' href='css/site.css' />
+    <!--[if lte IE 8]><link rel='stylesheet' href='http://cdn.leafletjs.com/leaflet-0.5/leaflet.ie.css' /><![endif]-->
+
+</head>
+<body>
+    <div class='container'>
+        <div class='col12 pad1'>
+            <div class='col2'>
+                <select id='type'>
+                    <option value='node'>Node</option>
+                    <option value='way'>Way</option>
+                    <option value='relation'>Relation</option>
+                </select>
+            </div>
+            <div class='col2'>
+                <input id='id'/>
+            </div>
+            <div class='col1'>
+                <button id='go'>Get History</button>
+            </div>
+        </div>
+    </div>
+    <div id='history'>
+    </div>
+    <script src='http://cdn.leafletjs.com/leaflet-0.5/leaflet.js'></script>
+    <script src='http://code.jquery.com/jquery-1.10.0.min.js'></script>
+    <script src='js/bundle.js'></script>
+</body>
+</html>

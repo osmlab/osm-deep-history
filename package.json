@@ -1,0 +1,25 @@
+{
+  "name": "osm-deep-history",
+  "version": "0.0.1",
+  "description": "display an OSM object's history",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "./node_modules/browservefy/bin/browservefy index.js:bundle.js 8080 --browserify=./node_modules/browserify/bin/cmd.js -- -d"
+  },
+  "repository": "git@github.com:iandees/osm-deep-history.git",
+  "keywords": [
+    "openstreetmap"
+  ],
+  "author": "Ian Dees <ian.dees@gmail.com>",
+  "license": "BSD",
+  "dependencies": {
+    "reqwest": "~0.7.3",
+    "through": "~2.3.1",
+    "qs": "~0.5.6",
+    "moment": "~2.0.0"
+  },
+  "devDependencies": {
+    "browserify": "2.4.3"
+  }
+}
