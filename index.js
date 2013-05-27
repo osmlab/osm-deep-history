@@ -24,10 +24,10 @@ var osmHistory = (function osmDeepHistory() {
 
     function parseElementHistory(x, obj_type) {
         if (!x) return undefined;
-        var o = [],
+        var o = {node:{}, way:{}, relation:{}},
             i,
-            nodes = [],
-            members = [],
+            wayMembers = [],
+            relMembers = [],
             nds = x.getElementsByTagName(obj_type);
         for (i = 0; i < nds.length; i++) {
             var nodeElem = nds[i],
@@ -51,20 +51,24 @@ var osmHistory = (function osmDeepHistory() {
                 n.lon = +nodeElem.getAttribute('lon');
             } else if (n.type === 'way') {
                 for (var k = 0; k < nds.length; k++) {
-                    nodes.push(+nds[k].getAttribute('ref'));
+                    wayMembers.push(+nds[k].getAttribute('ref'));
                 }
-                n.nodes = nodes;
+                n.nodes = wayMembers;
             } else if (n.type === 'relation') {
                 for (var l = 0; l < memberElems.length; l++) {
-                    members.push({
+                    relMembers.push({
                         type: memberElems[l].getAttribute('type'),
                         ref: memberElems[l].getAttribute('ref'),
                         role: memberElems[l].getAttribute('role')
                     });
                 }
+                n.members = relMembers;
             }
 
-            o.push(n);
+            if (!(n.id in o[n.type])) {
+                o[n.type][n.id] = [];
+            }
+            o[n.type][n.id].push(n);
         }
         return o;
     }
