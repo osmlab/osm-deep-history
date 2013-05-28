@@ -3,6 +3,7 @@ var hist = require('../index.js');
 
 var map = L.map('map').setView([51.505, -0.09], 13);
 L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+var overlays = L.featureGroup([]).addTo(map);
 
 $(document).ready(function() {
     var hash = document.location.hash;
@@ -60,6 +61,8 @@ $('#go').click(function() {
 
         console.log(objects);
 
+        overlays.clearLayers();
+
         html += "<tr class='row_header'><th class='first_column'>Version</th>";
         for (i = 0; i < object.length; i++) {
             step = object[i];
@@ -70,6 +73,20 @@ $('#go').click(function() {
         html += dataColumn('Time', object, 'timestamp', function(time) { return time.format('LLL'); });
         html += dataColumn('Changeset', object, 'changeset');
         html += dataColumn('User', object, 'user');
+
+        if (type == 'node') {
+            for (i = 0; i < object.length; i++) {
+                if (object[i].visible) {
+                    overlays.addLayer(L.circleMarker([object[i].lat, object[i].lon]));
+                }
+            }
+            map.fitBounds(overlays.getBounds());
+            $('#map').show();
+            map.invalidateSize();
+        } else {
+            $('#map').hide();
+            map.invalidateSize();
+        }
 
         html += "<tr class='row_header'><th class='first_column'>Tags</th>";
         for (i = 0; i < object.length; i++) {

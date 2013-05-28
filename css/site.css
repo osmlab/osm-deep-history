@@ -1,5 +1,6 @@
 #map {
     height: 200px;
+    display: none;
 }
 
 .first_column {
