@@ -1,0 +1,26 @@
+#map {
+    height: 200px;
+}
+
+.first_column {
+    width: 150px;
+}
+
+.row_header {
+    background-color: #aaa;
+}
+
+.unchanged {
+}
+
+.added {
+    background-color: #cfc;
+}
+
+.removed {
+    background-color: #fcc;
+}
+
+.changed {
+    background-color: #ff9;
+}
