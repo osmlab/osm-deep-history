@@ -37,7 +37,8 @@ var osmHistory = (function osmDeepHistory() {
                     timestamp: moment(nodeElem.getAttribute('timestamp')),
                     changeset: +nodeElem.getAttribute('changeset'),
                     version: +nodeElem.getAttribute('version'),
-                    id: +nodeElem.getAttribute('id')
+                    id: +nodeElem.getAttribute('id'),
+                    visible: (nodeElem.getAttribute('visible') === 'true')
                 },
                 tgs = nodeElem.getElementsByTagName('tag'),
                 tags = {};
