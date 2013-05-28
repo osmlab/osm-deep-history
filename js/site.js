@@ -1,6 +1,7 @@
 var hist = require('../index.js');
 
 var map = L.map('map').setView([51.505, -0.09], 13);
+L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
 $(document).ready(function() {
     var hash = document.location.hash;
@@ -31,35 +32,35 @@ $('#go').click(function() {
 
         console.log(objects);
 
-        html += "<tr><th>Version</th>";
+        html += "<tr><th class='first_column'>Version</th>";
         for (i = 0; i < object.length; i++) {
             step = object[i];
             html += "<th>" + step.version + "</th>";
         }
         html += "</tr>";
 
-        html += "<tr><td>Time</td>";
+        html += "<tr><td class='first_column'>Time</td>";
         for (i = 0; i < object.length; i++) {
             step = object[i];
             html += "<td>" + step.timestamp.format("LLL") + "</td>";
         }
         html += "</tr>";
 
-        html += "<tr><td>Changeset</td>";
+        html += "<tr><td class='first_column'>Changeset</td>";
         for (i = 0; i < object.length; i++) {
             step = object[i];
             html += "<td>" + step.changeset + "</td>";
         }
         html += "</tr>";
 
-        html += "<tr><td>User</td>";
+        html += "<tr><td class='first_column'>User</td>";
         for (i = 0; i < object.length; i++) {
             step = object[i];
             html += "<td>" + step.user + "</td>";
         }
         html += "</tr>";
 
-        html += "<tr><th>Tags</th>";
+        html += "<tr><th class='first_column'>Tags</th>";
         for (i = 0; i < object.length; i++) {
             html += "<th></th>";
         }
@@ -74,7 +75,7 @@ $('#go').click(function() {
         }
 
         for (key in objectTags) {
-            html += "<tr><td>" + key + "</td>";
+            html += "<tr><td class='first_column'>" + key + "</td>";
             for (i = 0; i < object.length; i++) {
                 step = object[i];
                 tagValue = step.tags[key];
