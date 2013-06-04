@@ -25,3 +25,7 @@
 .changed {
     background-color: #ff9;
 }
+
+.version_cell {
+    min-width: 200px;
+}

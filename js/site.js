@@ -37,7 +37,7 @@ var dataColumn = function(row_name, data, key, value_transform) {
             clazz = 'changed';
         }
 
-        html += "<td class='" + clazz + "'>" + val + "</td>";
+        html += "<td class='" + clazz + " version_cell'>" + val + "</td>";
         prev = val;
     }
     html += "</tr>";
