@@ -53,10 +53,10 @@ $('#go').click(function() {
     document.location.hash = "/" + type + "/" + id;
 
     hist.getObjectHistory(type, id, function(err, objects) {
-        var html = "<table border='1'>",
-            i, step, key,
+        var i, step, key,
             objectTags = {},
-            object = objects[type][id];
+            object = objects[type][id],
+            html = "<table border='1' style='min-width: " + object.length * 200 + "px;'>";
 
         console.log(objects);
 

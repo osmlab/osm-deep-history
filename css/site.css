@@ -28,4 +28,5 @@
 
 .version_cell {
     overflow: hidden;
+    white-space: nowrap;
 }
