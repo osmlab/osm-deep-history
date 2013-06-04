@@ -37,7 +37,7 @@ var dataColumn = function(row_name, data, key, value_transform) {
             clazz = 'changed';
         }
 
-        html += "<td class='" + clazz + " version_cell'>" + val + "</td>";
+        html += "<td class='" + clazz + "'>" + val + "</td>";
         prev = val;
     }
     html += "</tr>";
@@ -65,7 +65,7 @@ $('#go').click(function() {
         html += "<tr class='row_header'><th class='first_column'>Version</th>";
         for (i = 0; i < object.length; i++) {
             step = object[i];
-            html += "<th>" + step.version + "</th>";
+            html += "<th class='version_column'>" + step.version + "</th>";
         }
         html += "</tr>";
 
