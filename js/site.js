@@ -73,16 +73,16 @@ function clickGo() {
             objectTags = {},
             object = objects[type][id].sort(function(a,b) { return b.version - a.version; });
 
-        d3.select('#history-2 table')
+        d3.select('#history table')
             .remove();
 
-        var table = d3.select('#history-2')
+        var table = d3.select('#history')
             .append('table')
             .datum(object);
 
         table.append('tr').attr('class', 'row_header').call(row('version', 'Version'));
         table.append('tr').call(row('timestamp', 'Time', timeFormat));
-        table.append('tr').call(row('changeset', 'Changeset'));
+        table.append('tr').call(row('changeset', 'Changeset', changesetLink));
         table.append('tr').call(row('user', 'User', userLink));
         table.append('tr')
             .attr('class', 'row_header')
@@ -102,6 +102,10 @@ function clickGo() {
 
         function userLink(d) {
             return '<a target="_blank" href="http://openstreetmap.org/user/' + d + '">' + d + '</a>';
+        }
+
+        function changesetLink(d) {
+            return '<a target="_blank" href="http://openstreetmap.org/browse/changeset/' + d + '">' + d + '</a>';
         }
 
         overlays.clearLayers();
