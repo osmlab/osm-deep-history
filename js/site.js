@@ -71,7 +71,7 @@ function clickGo() {
         }
         var i, step, key,
             objectTags = {},
-            object = objects[type][id].sort(function(a,b) { return b.version - a.version; });
+            object = objects[type][id];
 
         d3.select('#history table')
             .remove();
