@@ -72,7 +72,7 @@ function clickGo() {
         }
         var i, step, key,
             objectTags = {},
-            object = objects[type][id];
+            object = objects[type][id].sort(function(a,b) { return b.version - a.version; });
 
         d3.select('#history-2 table')
             .remove();
@@ -89,6 +89,7 @@ function clickGo() {
             .attr('class', 'row_header')
             .append('th')
             .attr('colspan', function(d) { return d.length + 1; })
+            .attr('class', 'field')
             .text('Tags');
 
         object.reduce(function(memo, o) {
