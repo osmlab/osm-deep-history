@@ -50,6 +50,13 @@ function row(field, title, formatter, tag) {
 }
 
 d3.select('#go').on('click', clickGo);
+d3.select('#id').on('keydown', keyPress);
+
+function keyPress() {
+    if (d3.event.keyCode == 13) {
+        clickGo();
+    }
+}
 
 function clickGo() {
     var type = d3.select('#type').property('value'),
