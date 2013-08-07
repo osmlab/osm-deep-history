@@ -64,8 +64,10 @@ function clickGo() {
         }
         var i, step, key,
             objectTags = {},
-            object = objects[type][id],
-            html = "<table border='1' style='min-width: " + object.length * 200 + "px;'>";
+            object = objects[type][id];
+
+        d3.select('#history-2 table')
+            .remove();
 
         var table = d3.select('#history-2')
             .append('table')
