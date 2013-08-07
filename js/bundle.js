@@ -59,6 +59,10 @@ function clickGo() {
     document.location.hash = "/" + type + "/" + id;
 
     hist.getObjectHistory(type, id, function(err, objects) {
+        if (err) {
+            console.log("Could not fetch " + type + " " + id + ": " + err.status);
+            return;
+        }
         var i, step, key,
             objectTags = {},
             object = objects[type][id],
@@ -130,6 +134,9 @@ var osmHistory = (function osmDeepHistory() {
             type: 'xml',
             success: function(res) {
                 cb(null, res);
+            },
+            error: function(err) {
+                cb(err);
             }
         });
     }

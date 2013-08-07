@@ -18,6 +18,9 @@ var osmHistory = (function osmDeepHistory() {
             type: 'xml',
             success: function(res) {
                 cb(null, res);
+            },
+            error: function(err) {
+                cb(err);
             }
         });
     }
