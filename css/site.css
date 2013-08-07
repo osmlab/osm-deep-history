@@ -33,3 +33,7 @@
     padding-left: 0.3em;
     width: 13em;
 }
+
+table {
+    width: auto;
+}
