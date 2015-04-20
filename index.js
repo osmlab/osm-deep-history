@@ -54,11 +54,13 @@ var osmHistory = (function osmDeepHistory() {
                 n.lat = +nodeElem.getAttribute('lat');
                 n.lon = +nodeElem.getAttribute('lon');
             } else if (n.type === 'way') {
-                for (var k = 0; k < nds.length; k++) {
-                    wayMembers.push(+nds[k].getAttribute('ref'));
+                var nodeElems = nodeElem.getElementsByTagName('nd');
+                for (var k = 0; k < nodeElems.length; k++) {
+                    wayMembers.push(+nodeElems[k].getAttribute('ref'));
                 }
                 n.nodes = wayMembers;
             } else if (n.type === 'relation') {
+                var memberElems = nodeElem.getElementsByTagName('member');
                 for (var l = 0; l < memberElems.length; l++) {
                     relMembers.push({
                         type: memberElems[l].getAttribute('type'),
