@@ -37,3 +37,11 @@
 table {
     width: auto;
 }
+
+a {
+  text-decoration: underline;
+}
+
+a:visited {
+  color: #555;
+}
