@@ -2,7 +2,7 @@ var hist = require('../index.js'),
     d3 = require('d3');
 
 var map = L.map('map').setView([51.505, -0.09], 13);
-L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 var overlays = L.featureGroup([]).addTo(map);
 
 d3.select(window).on('load', function() {
@@ -101,11 +101,11 @@ function clickGo() {
         function timeFormat(d) { return d.format('LLL');  }
 
         function userLink(d) {
-            return '<a target="_blank" href="http://openstreetmap.org/user/' + d + '">' + d + '</a>';
+            return '<a target="_blank" href="https://openstreetmap.org/user/' + d + '">' + d + '</a>';
         }
 
         function changesetLink(d) {
-            return '<a target="_blank" href="http://openstreetmap.org/browse/changeset/' + d + '">' + d + '</a>';
+            return '<a target="_blank" href="https://openstreetmap.org/browse/changeset/' + d + '">' + d + '</a>';
         }
 
         overlays.clearLayers();
