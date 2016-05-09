@@ -3,7 +3,7 @@ var reqwest = require('reqwest'),
     moment = require('moment');
 
 var osmHistory = (function osmDeepHistory() {
-    var baseUrl = 'http://api.openstreetmap.org/api/0.6/';
+    var baseUrl = '//api.openstreetmap.org/api/0.6/';
 
     var s = {};
 
