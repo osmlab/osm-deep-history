@@ -21,6 +21,7 @@
     "d3": "~3.1.10"
   },
   "devDependencies": {
-    "browserify": "2.4.3"
+    "browserify": "2.4.3",
+    "browservefy": "0.0.10"
   }
 }
