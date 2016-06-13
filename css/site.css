@@ -4,7 +4,7 @@
 }
 
 #history {
-    width: 100%;
+    right: 0;
     margin-left: 10em;
     overflow: auto;
 }
