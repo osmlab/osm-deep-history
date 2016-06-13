@@ -3,12 +3,24 @@
     display: none;
 }
 
+#history {
+    width: 100%;
+    margin-left: 10em;
+    overflow: auto;
+}
+
 .field {
+    position: absolute;
+    left: 0;
     width: 10em;
     padding-left: 0.5em;
 }
 
 .row_header {
+    background-color: #eee;
+}
+
+.row_header .field {
     background-color: #eee;
 }
 
@@ -36,6 +48,7 @@
 
 table {
     width: auto;
+    margin-bottom: 0;
 }
 
 a {

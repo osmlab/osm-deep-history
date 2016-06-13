@@ -84,12 +84,16 @@ function clickGo() {
         table.append('tr').call(row('timestamp', 'Time', timeFormat));
         table.append('tr').call(row('changeset', 'Changeset', changesetLink));
         table.append('tr').call(row('user', 'User', userLink));
-        table.append('tr')
-            .attr('class', 'row_header')
-            .append('th')
-            .attr('colspan', function(d) { return d.length + 1; })
+
+        var tr = table.append('tr')
+            .attr('class', 'row_header');
+
+        tr.append('th')
             .attr('class', 'field')
             .text('Tags');
+        tr.append('td')
+            .attr('colspan', function(d) { return d.length; })
+            .html('&nbsp;');
 
         object.reduce(function(memo, o) {
             d3.keys(o.tags).forEach(function(s) { memo.add(s); });
