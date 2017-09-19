@@ -1,5 +1,5 @@
 #map {
-    height: 200px;
+    height: 300px;
     display: none;
 }
 
@@ -46,6 +46,10 @@
     width: 13em;
 }
 
+.leaflet-tooltip {
+    background: lightpink;
+}
+
 table {
     width: auto;
     margin-bottom: 0;
@@ -57,4 +61,8 @@ a {
 
 a:visited {
   color: #555;
+}
+
+button {
+  margin-left: 1em;
 }
