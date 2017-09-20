@@ -31,7 +31,7 @@ function row(field, title, formatter, tag) {
             .enter()
             .append('td')
             .attr('class', function(d) {
-                return 'version_cell ' + pClass(tag ? d.tags[field] : d[field]);
+                return 'version_cell ' + (d.visible ? pClass(tag ? d.tags[field] : d[field]) : 'removed');
             })
             .html(function(d) {
                 return (formatter || function(x) { return x; })(tag ? d.tags[field] : d[field]);
@@ -85,6 +85,11 @@ function clickGo() {
         table.append('tr').call(row('changeset', 'Changeset', changesetLink));
         table.append('tr').call(row('user', 'User', userLink));
 
+        if (type == 'node') {
+            table.append('tr').call(row('lat', 'Lat'));
+            table.append('tr').call(row('lon', 'Lon'));
+        }
+
         var tr = table.append('tr')
             .attr('class', 'row_header');
 
@@ -115,14 +120,14 @@ function clickGo() {
         overlays.clearLayers();
 
         if (type == 'node') {
-            for (i = 0; i < object.length; i++) {
+            for (i = object.length -1; i >= 0; i--) {
                 if (object[i].visible) {
-                    overlays.addLayer(L.circleMarker([object[i].lat, object[i].lon]));
+                    overlays.addLayer(L.marker([object[i].lat, object[i].lon]).bindTooltip((i+1).toString(), {permanent: true}));
                 }
             }
-            map.fitBounds(overlays.getBounds());
             d3.select('#map').style('display', 'block');
             map.invalidateSize();
+            map.fitBounds(overlays.getBounds(), {paddingTopLeft: L.point(0, 50)});
         } else {
             d3.select('#map').style('display', 'none');
             map.invalidateSize();
