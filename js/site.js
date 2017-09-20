@@ -98,7 +98,7 @@ function clickGo() {
         object.reduce(function(memo, o) {
             d3.keys(o.tags).forEach(function(s) { memo.add(s); });
             return memo;
-        }, d3.set()).forEach(function(tag) {
+        }, d3.set()).each(function(tag) {
             table.append('tr').call(row(tag, tag, null, true));
         });
 
