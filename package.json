@@ -4,8 +4,8 @@
   "description": "Display an OSM object's history",
   "main": "index.js",
   "scripts": {
-    "build": "./node_modules/.bin/browserify js/site.js > js/bundle.js",
-    "start": "./node_modules/.bin/beefy index.js:bundle.js 8080 --browserify=./node_modules/browserify/bin/cmd.js -- -d"
+    "build": "browserify -g uglifyify js/site.js > js/bundle.js",
+    "start": "beefy index.js:bundle.js 8080 --browserify=./node_modules/browserify/bin/cmd.js -- -d"
   },
   "repository": "git@github.com:iandees/osm-deep-history.git",
   "keywords": [
@@ -21,6 +21,7 @@
   },
   "devDependencies": {
     "beefy": "2.1.8",
-    "browserify": "13.0.1"
+    "browserify": "13.0.1",
+    "uglifyify": "^4.0.4"
   }
 }
