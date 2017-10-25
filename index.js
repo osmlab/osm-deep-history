@@ -1,153 +1,299 @@
+const d3 = require('d3');
 const _ = require('lodash');
-const reqwest = require('reqwest');
-const moment = require('moment');
+const hist = require('./osmhistory');
 
-const osmHistory = (function osmDeepHistory() {
-    const baseUrl = '//api.openstreetmap.org/api/0.6/';
+const googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+    maxZoom: 20,
+    subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+});
+const osmTile = L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+const baseMaps = {
+    "OpenStreetMap": osmTile,
+    "Google Satellite": googleSat
+};
 
-    const osmObjects = {
-        node: {},
-        way: {},
-        relation: {}
-    }
+const map = L.map('map', { layers: [osmTile] }).setView([51.505, -0.09], 13);
+L.control.layers(baseMaps).addTo(map);
 
-    const s = {};
+const overlays = L.featureGroup([]).addTo(map);
 
-    // reqwest doesn't support promise chaining, has to wrap it
-    function requestOsmApi(url) {
-        console.log('Request OSM API', url);
-        return new Promise((resolve, reject) => {
-            reqwest({
-                url,
-                crossOrigin: true,
-                type: 'xml',
-                success: resolve,
-                error: reject
-            });
-        });
-    }
-
-
-    function getObjVersionByDate(type, id, timestamp) {
-        const versions = osmObjects[type][id];
-        for (let i = versions.length - 1; i >= 0; i--) {
-            if (versions[i].timestamp.isSameOrBefore(timestamp)) {
-                return versions[i];
-            }
-        }
-        return versions[0];
-    }
-
-    s.requestReferenceHistoryForWay = function (id) /* => Promise<void> */ {
-        const way = osmObjects['way'][id];
-        if (!way) {
-            return Promise.reject("Can't request reference for unknown way");
-        }
-        const node_ids = _.uniq(_.flatMap(way, v => v.nodes));
-        return Promise
-            .all(_.map(node_ids, id => s.getObjectHistory('node', id)))
-            .then(r => { return; });
-    }
-
-    s.getWayHistoryFull = function (way_obj) {
-        return _.map(way_obj, v => {
-            return {
-                version: v.version,
-                latlons: _.map(v.nodes, id => {
-                    const node = getObjVersionByDate('node', id, v.timestamp);
-                    return [node.lat, node.lon];
-                })
-            };
-        });
-    };
-
-    s.getWayHistoryByDate = function (id, timestamp) {
-        const way = getObjVersionByDate('way', id, timestamp);
-        return {
-            way,
-            nodes: _.map(way.nodes, nid => getObjVersionByDate('node', nid, timestamp))
-        }
-    };
-
-    function xmlElementToObj(e) {
-        const obj = {
-            type: e.tagName,
-            user: e.getAttribute('user'),
-            timestamp: moment(e.getAttribute('timestamp')),
-            changeset: +e.getAttribute('changeset'),
-            version: +e.getAttribute('version'),
-            id: +e.getAttribute('id'),
-            tags: _.fromPairs(_.map(e.getElementsByTagName('tag'), t => [t.getAttribute('k'), t.getAttribute('v')])),
-            visible: (e.getAttribute('visible') === 'true')
-        };
-        switch (obj.type) {
-            case 'node':
-                obj.lat = +e.getAttribute('lat');
-                obj.lon = +e.getAttribute('lon');
-                break;
-            case 'way':
-                obj.nodes = _.map(e.getElementsByTagName('nd'), e => e.getAttribute('ref'));
-                break;
-            case 'relation':
-                obj.members = _.map(e.getElementsByTagName('member'), e => {
-                    return {
-                        type: e.getAttribute('type'),
-                        ref: e.getAttribute('ref'),
-                        role: e.getAttribute('role')
-                    }
-                });
-        }
-        return obj;
-    }
-
-    s.getObjectHistory = function (obj_type, obj_id) {
-        console.log('Get history of', obj_type, obj_id);
-        if (osmObjects[obj_type][obj_id]) {
-            return Promise.resolve(osmObjects[obj_type][obj_id]);
+d3.select(window).on('load', function () {
+    var hash = document.location.hash;
+    if (hash) {
+        var match = /^#\/(node|way|relation)\/(\d*)/.exec(hash);
+        if (match) {
+            d3.select('#type').property('value', match[1]);
+            d3.select('#id').property('value', match[2]);
+            clickGo();
         } else {
-            return requestOsmApi(baseUrl + obj_type + '/' + obj_id + '/history')
-                .then(xml => {
-                    const objHistory = _.map(xml.getElementsByTagName(obj_type), xmlElementToObj);
-                    osmObjects[obj_type][obj_id] = objHistory;
-                    return objHistory;
-                });
+            document.location.hash = "";
+        }
+    }
+});
+
+d3.select('#go').on('click', clickGo);
+d3.select('#id').on('keydown', keyPress);
+
+// --------------------------------------------------
+
+function displayStatus(msg) {
+    d3.select('#status').html(msg);
+}
+
+function keyPress() {
+    if (d3.event.keyCode == 13) {
+        clickGo();
+    }
+}
+
+function clickGo() {
+    displayStatus('Loading...');
+    overlays.clearLayers();
+
+    const type = d3.select('#type').property('value');
+    const id = +d3.select('#id').property('value');
+
+    document.location.hash = "/" + type + "/" + id;
+
+    hist.getObjectHistory(type, id)
+        .then(show)
+        .catch(err => {
+            console.log(err);
+            if (err.status && err.status === 404) {
+                displayStatus('Object does not exist');
+            } else {
+                displayStatus('Error occurred');
+            }
+        });
+}
+
+function show(object, more) {
+    if (!more) {
+        showTable(object);
+    };
+    hideShowMoreButton();
+    showMap(object, more)
+        .then(mapStatusChanged)
+        .catch(console.log);
+}
+
+function row(field, title, formatter, tag) {
+    return function (selection) {
+        var prev;
+
+        selection.append('th').attr('class', 'field').text(title || field);
+
+        selection
+            .selectAll('td.version')
+            .data(_.identity)
+            .enter()
+            .append('td')
+            .attr('class', function (d) {
+                const changeStatus =
+                    (field === 'version' && !d.visible) ?
+                        'version_cell removed' : pClass(tag ? d.tags[field] : d[field]);
+                return `version_cell ${changeStatus} version_${d.version}`;
+            })
+            .html(function (d) {
+                return (formatter || _.identity)(tag ? d.tags[field] : d[field]);
+            });
+
+        function pClass(val) {
+            try {
+                if (prev == val) return 'unchanged';
+                else if (!prev && val && val != prev) return 'added';
+                else if (prev && !val) return 'removed';
+                else if (val && prev != val) return 'changed';
+            } finally { prev = val; }
         }
     };
+}
 
-    function requestWayFull(way_id) /* => Promise<Array<[lat, lon]>> */ {
-        return requestOsmApi(baseUrl + 'way/' + way_id + '/full')
-            .then(x => {
-                const nodes =
-                    _.keyBy(
-                        _.map(x.getElementsByTagName('node'), e => {
-                            return {
-                                id: e.getAttribute('id'),
-                                lat: e.getAttribute('lat'),
-                                lon: e.getAttribute('lon'),
-                            };
-                        }),
-                        'id');
-                return {
-                    id: way_id,
-                    latlons: _.map(x.getElementsByTagName('nd'), e => e.getAttribute('ref'))
-                        .map(id => {
-                            const n = nodes[id];
-                            return [n.lat, n.lon];
-                        })
-                };
-            });
+function userLink(d) {
+    return '<a target="_blank" href="//openstreetmap.org/user/' + d + '">' + d + '</a>';
+}
+
+function changesetLink(d) {
+    return '<a target="_blank" href="https://osmcha.mapbox.com/changesets/' + d + '">' + d + '</a>';
+}
+
+function showTable(object) {
+    d3.select('#history table')
+        .remove();
+
+    const table = d3.select('#history')
+        .append('table')
+        .datum(object);
+
+    table.append('tr').attr('class', 'row_header')
+        .call(row('version', 'Version'));
+    table.append('tr').call(row('timestamp', 'Time', d => d.format('LLL')));
+    table.append('tr').call(row('changeset', 'Changeset', changesetLink));
+    table.append('tr').call(row('user', 'User', userLink));
+
+    if (object[0].type === 'node') {
+        table.append('tr').call(row('lat', 'Lat'));
+        table.append('tr').call(row('lon', 'Lon'));
     }
 
-    s.getWaysNodeBelongsTo = function (node_id) /* => Promise */ {
-        return requestOsmApi(baseUrl + 'node/' + node_id + '/ways')
-            .then(x => {
-                return Promise.all(
-                    _.map(x.getElementsByTagName('way'), e => e.getAttribute('id'))
-                        .map(requestWayFull));
-            });
+    const tr = table.append('tr')
+        .attr('class', 'row_header');
+    tr.append('th')
+        .attr('class', 'field')
+        .text('Tags');
+    tr.append('td')
+        .attr('colspan', d => d.length)
+        .html('&nbsp;');
+
+    object
+        .reduce((memo, o) => {
+            d3.keys(o.tags).forEach(s => memo.add(s));
+            return memo;
+        }, d3.set())
+        .each(tag => {
+            table.append('tr').call(row(tag, tag, null, true));
+        });
+}
+
+function showMap(object, more) /* => Promise<Status> */ {
+    displayStatus('Loading...');
+    switch (object[0].type) {
+        case 'node':
+            return showNode(object);
+        case 'way':
+            return more ? showWayAdvance(object) : showWay(object);
+        default:
+            return Promise.resolve({ showMap: false, more: false });
+    }
+}
+
+function mapStatusChanged(status) {
+    if (status.showMap) {
+        d3.select('#map').style('display', 'block');
+        map.fitBounds(overlays.getBounds(), { paddingTopLeft: L.point(0, 50) });
+        map.invalidateSize();
+    } else {
+        d3.select('#map').style('display', 'none');
     }
 
-    return s;
-})();
+    if (status.more) {
+        d3.select('#more')
+            .classed('hide', false)
+            .on('click', () => show(status.object, true));
+        displayStatus('');
+    } else {
+        displayStatus('All loaded');
+    }
+}
 
-module.exports = osmHistory;
+function hideShowMoreButton() {
+    d3.select('#more').classed('hide', true);
+}
+
+function showExportButton(type, obj, refObjects) {
+    const data = exportLevel0(type, obj, refObjects);
+    if (data) {
+        const cell = d3.select(`.row_header .version_${obj.version}`);
+        cell.append('button')
+            .html('export')
+            .on('click', () => {
+                const newWindow = d3.select(window.open().document.body);
+                newWindow.append('pre').text(data);
+            });
+    }
+}
+
+function level0lTags(tags) {
+    return _.map(tags, (v, k) => `  ${k} = ${v}\n`).join('');
+}
+
+function level0lNode(node) {
+    return `node ${node.id}: ${node.lat}, ${node.lon}\n` + level0lTags(node.tags);
+}
+
+function level0lWay(way) {
+    return `way ${way.id}\n` + _.map(way.nodes, id => `  nd ${id}\n`).join('') + level0lTags(way.tags);
+}
+
+function exportLevel0(type, obj, refObjects) {
+    switch (type) {
+        case 'way':
+            return level0lWay(obj) + '\n' +
+                _.map(refObjects, level0lNode).join('\n');
+        case 'node':
+            return level0lNode(obj);
+        default:
+            return undefined;
+    }
+}
+
+function showMapLayer(layer, version, panTo, color) {
+    layer.bindTooltip(version.toString(), { direction: 'top', offset: L.point(0, -10), className: 'leaflet-tooltip' });
+    overlays.addLayer(layer);
+    d3.selectAll(`.version_${version}`)
+        .on('mouseover', () => {
+            layer.setStyle({ color: 'red' }).openTooltip().bringToFront();
+            map.panTo(panTo, { animate: true });
+        })
+        .on('mouseleave', () => layer.setStyle({ color }).closeTooltip());
+
+}
+
+function putNodeVersionOnMap(node) {
+    const color = 'blue';
+    if (node.visible) {
+        const marker = L.circleMarker([node.lat, node.lon], { color });
+        showMapLayer(marker, node.version, [node.lat, node.lon], color);
+        showExportButton('node', node);
+    }
+}
+
+function showNode(object) {
+    _.forEach(object, putNodeVersionOnMap);
+    return hist.getWaysNodeBelongsTo(object[object.length - 1].id)
+        .then(ways => {
+            ways.forEach(way => {
+                overlays.addLayer(
+                    L.polyline(way.latlons, { color: 'orange' })
+                        .bindPopup(`<a href="#/way/${way.id}" target="_blank">${way.id}</a>`)
+                );
+            });
+            return { showMap: true, more: false };
+        })
+}
+
+function nodesToLatlons(nodes) {
+    return _.map(nodes, node => [node.lat, node.lon]);
+}
+
+function showWay(object) {
+    const lastVersion = object[object.length - 1];
+    if (!lastVersion.visible) {
+        return Promise.resolve({ showMap: false, more: true, object });
+    }
+    return hist.requestWayFull(lastVersion.id)
+        .then(({ latlons }) => {
+            overlays.addLayer(
+                L.polyline(latlons, { color: 'orange' })
+            );
+            return { showMap: true, more: true, object };
+        });
+}
+
+function showWayAdvance(object) {
+    return hist.requestReferenceHistoryForWay(object[0].id)
+        .then(() => {
+            const latestVersion = _.last(object).version;
+            _.forEach(
+                _.filter(object, v => v.visible),
+                way => {
+                    const color = way.version === latestVersion ? 'orange' : 'blue';
+                    const { $, nodes } = hist.getWayHistoryByDate(way.id, way.timestamp);
+                    const polyline = L.polyline(nodesToLatlons(nodes), { color });
+                    showMapLayer(polyline, way.version, polyline.getBounds().getCenter(), color);
+                    showExportButton('way', way, nodes);
+                }
+            );
+            return { showMap: true, more: false };
+        });
+}
