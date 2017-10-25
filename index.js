@@ -145,14 +145,8 @@ function showTable(object) {
         .attr('colspan', d => d.length)
         .html('&nbsp;');
 
-    object
-        .reduce((memo, o) => {
-            d3.keys(o.tags).forEach(s => memo.add(s));
-            return memo;
-        }, d3.set())
-        .each(tag => {
-            table.append('tr').call(row(tag, tag, null, true));
-        });
+    const tags = _.uniq(_.flatMap(object, o => _.keys(o.tags)));
+    _.forEach(tags.sort(), tag => table.append('tr').call(row(tag, tag, null, true)));
 }
 
 function showMap(object, more) /* => Promise<Status> */ {
