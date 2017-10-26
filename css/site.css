@@ -1,26 +1,19 @@
+body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+#main {
+    flex: 1;
+}
+
 #map {
-    height: 300px;
     display: none;
-}
-
-#history {
-    right: 0;
-    margin-left: 10em;
-    overflow: auto;
-}
-
-.field {
-    position: absolute;
-    left: 0;
-    width: 10em;
-    padding-left: 0.5em;
+    min-height: 300px;
 }
 
 .row_header {
-    background-color: #eee;
-}
-
-.row_header .field {
     background-color: #eee;
 }
 
@@ -39,30 +32,13 @@
     background-color: #ff9;
 }
 
-.version_cell {
-    overflow: hidden;
-    white-space: nowrap;
-    padding-left: 0.3em;
-    width: 13em;
-}
-
 .leaflet-tooltip {
     background: lightpink;
 }
 
-table {
-    width: auto;
-    margin-bottom: 0;
-}
-
-a {
-  text-decoration: underline;
-}
-
-a:visited {
-  color: #555;
-}
-
-button {
-  margin-left: 1em;
+.button.is-tiny {
+    margin-left: 1em;
+    font-size: .7rem;
+    height: 1.4em;
+    padding-top: 0;
 }

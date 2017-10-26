@@ -1,6 +1,7 @@
 const d3 = require('d3');
 const _ = require('lodash');
 const hist = require('./osmhistory');
+const fixedTable = require('./fixedtable');
 
 const googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
     maxZoom: 20,
@@ -36,8 +37,14 @@ d3.select('#id').on('keydown', keyPress);
 
 // --------------------------------------------------
 
-function displayStatus(msg) {
-    d3.select('#status').html(msg);
+function errorMessage(msg) {
+    if (msg) {
+        d3.select('#error')
+            .classed('is-hidden', false)
+            .html(msg);
+    } else {
+        d3.select('#error').classed('is-hidden', true);
+    }
 }
 
 function keyPress() {
@@ -47,8 +54,9 @@ function keyPress() {
 }
 
 function clickGo() {
-    displayStatus('Loading...');
-    overlays.clearLayers();
+    clear();
+    errorMessage(undefined);
+    d3.select('#go').classed('is-loading', true);
 
     const type = d3.select('#type').property('value');
     const id = +d3.select('#id').property('value');
@@ -59,40 +67,59 @@ function clickGo() {
         .then(show)
         .catch(err => {
             console.log(err);
+            mapStatusChanged({showMap: false, more: false});
             if (err.status && err.status === 404) {
-                displayStatus('Object does not exist');
+                errorMessage('Object does not exist');
             } else {
-                displayStatus('Error occurred');
+                errorMessage('Error occurred');
             }
         });
+}
+
+function clear() {
+    d3.select('#history table').remove();
+    overlays.clearLayers();
+    mapStatusChanged({showMap: false, more: false});
 }
 
 function show(object, more) {
     if (!more) {
         showTable(object);
     };
-    hideShowMoreButton();
     showMap(object, more)
         .then(mapStatusChanged)
         .catch(console.log);
 }
 
+function showMap(object, more) /* => Promise<Status> */ {
+    if (more) {
+        d3.select('#more').classed('is-loading', true);
+    }
+    switch (object[0].type) {
+        case 'node':
+            return showNode(object);
+        case 'way':
+            return more ? showWayAdvance(object) : showWay(object);
+        default:
+            return Promise.resolve({ showMap: false, more: false });
+    }
+}
+
 function row(field, title, formatter, tag) {
     return function (selection) {
-        var prev;
-
-        selection.append('th').attr('class', 'field').text(title || field);
-
+        let prev;
+        const element = (field === 'version') ? 'th' : 'td';
+        selection.append(element).attr('class', 'field').text(title || field);
         selection
             .selectAll('td.version')
             .data(_.identity)
             .enter()
-            .append('td')
+            .append(element)
             .attr('class', function (d) {
                 const changeStatus =
                     (field === 'version' && !d.visible) ?
-                        'version_cell removed' : pClass(tag ? d.tags[field] : d[field]);
-                return `version_cell ${changeStatus} version_${d.version}`;
+                        'removed' : pClass(tag ? d.tags[field] : d[field]);
+                return `${changeStatus} version_${d.version}`;
             })
             .html(function (d) {
                 return (formatter || _.identity)(tag ? d.tags[field] : d[field]);
@@ -118,27 +145,25 @@ function changesetLink(d) {
 }
 
 function showTable(object) {
-    d3.select('#history table')
-        .remove();
-
     const table = d3.select('#history')
         .append('table')
         .datum(object);
 
-    table.append('tr').attr('class', 'row_header')
+    table.append('thead').append('tr').attr('class', 'row_header')
         .call(row('version', 'Version'));
-    table.append('tr').call(row('timestamp', 'Time', d => d.format('LLL')));
-    table.append('tr').call(row('changeset', 'Changeset', changesetLink));
-    table.append('tr').call(row('user', 'User', userLink));
+    const tbody = table.append('tbody');
+    tbody.append('tr').call(row('timestamp', 'Time', d => d.format('LLL')));
+    tbody.append('tr').call(row('changeset', 'Changeset', changesetLink));
+    tbody.append('tr').call(row('user', 'User', userLink));
 
     if (object[0].type === 'node') {
-        table.append('tr').call(row('lat', 'Lat'));
-        table.append('tr').call(row('lon', 'Lon'));
+        tbody.append('tr').call(row('lat', 'Lat'));
+        tbody.append('tr').call(row('lon', 'Lon'));
     }
 
-    const tr = table.append('tr')
+    const tr = tbody.append('tr')
         .attr('class', 'row_header');
-    tr.append('th')
+    tr.append('td')
         .attr('class', 'field')
         .text('Tags');
     tr.append('td')
@@ -146,22 +171,13 @@ function showTable(object) {
         .html('&nbsp;');
 
     const tags = _.uniq(_.flatMap(object, o => _.keys(o.tags)));
-    _.forEach(tags.sort(), tag => table.append('tr').call(row(tag, tag, null, true)));
-}
+    _.forEach(tags.sort(), tag => tbody.append('tr').call(row(tag, tag, null, true)));
 
-function showMap(object, more) /* => Promise<Status> */ {
-    displayStatus('Loading...');
-    switch (object[0].type) {
-        case 'node':
-            return showNode(object);
-        case 'way':
-            return more ? showWayAdvance(object) : showWay(object);
-        default:
-            return Promise.resolve({ showMap: false, more: false });
-    }
+    fixedTable(document.getElementById('history'));
 }
 
 function mapStatusChanged(status) {
+    d3.select('#go').classed('is-loading', false);
     if (status.showMap) {
         d3.select('#map').style('display', 'block');
         map.fitBounds(overlays.getBounds(), { paddingTopLeft: L.point(0, 50) });
@@ -172,16 +188,17 @@ function mapStatusChanged(status) {
 
     if (status.more) {
         d3.select('#more')
-            .classed('hide', false)
+            .attr('disabled', null)
             .on('click', () => show(status.object, true));
-        displayStatus('');
     } else {
-        displayStatus('All loaded');
+        hideShowMoreButton();
     }
 }
 
 function hideShowMoreButton() {
-    d3.select('#more').classed('hide', true);
+    d3.select('#more')
+        .classed('is-loading', false)
+        .attr('disabled', 'disabled')
 }
 
 function showExportButton(type, obj, refObjects) {
@@ -189,6 +206,7 @@ function showExportButton(type, obj, refObjects) {
     if (data) {
         const cell = d3.select(`.row_header .version_${obj.version}`);
         cell.append('button')
+            .attr('class', 'button is-tiny')
             .html('export')
             .on('click', () => {
                 const newWindow = d3.select(window.open().document.body);

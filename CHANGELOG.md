@@ -1,7 +1,8 @@
-## 0.3.0
+## 1.0.0
 
+- New UI style enabled by Bulma
+- Scrollable table with fixed header and first column
 - Sort tags by name
-
 
 ## 0.2.0
 
