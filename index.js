@@ -137,7 +137,7 @@ function row(field, title, formatter, tag) {
 }
 
 function userLink(d) {
-    return '<a target="_blank" href="//openstreetmap.org/user/' + d + '">' + d + '</a>';
+    return '<a target="_blank" href="https://hdyc.neis-one.org/?' + d + '">' + d + '</a>';
 }
 
 function changesetLink(d) {
