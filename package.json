@@ -1,6 +1,6 @@
 {
   "name": "osm-deep-history",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Display an OSM object's history",
   "main": "index.js",
   "scripts": {
@@ -9,11 +9,13 @@
   },
   "repository": "git@github.com:iandees/osm-deep-history.git",
   "keywords": [
-    "openstreetmap"
+    "openstreetmap",
+    "gis"
   ],
   "author": "Ian Dees <ian.dees@gmail.com>",
   "contributors": [
-    "Leo Liang <leoliang@gmail.com"
+    "Leo Liang <leoliang@gmail.com>",
+    "Wille Marcel <wille@wille.blog.br>"
   ],
   "license": "BSD",
   "dependencies": {

@@ -12,7 +12,7 @@ Common:
 * Improve map UI and fix issues
 * When mouse hover on table cell, highlight corresponding version of object on map and pan to center
 * In table, show version which is invisible in red (`removed`)
-* Base map layer: OpenStreetMap and Google Satellite
+* Base map layer: OpenStreetMap and Mapbox Satellite Streets
 * Export full data of specific version in Level0L format
 
 Node:

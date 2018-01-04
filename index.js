@@ -3,14 +3,18 @@ const _ = require('lodash');
 const hist = require('./osmhistory');
 const fixedTable = require('./fixedtable');
 
-const googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
-    maxZoom: 20,
-    subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
-});
-const osmTile = L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+const mapboxSat = L.tileLayer(
+  'https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v9/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoicmFzYWd5IiwiYSI6ImNpejVrMjc4eTAwNGczM2thNWozYnJ1OHkifQ.yFRr3Sd39TJiwEguQpIkWQ',
+  {maxZoom: 20, attribution: '<a href="https://www.mapbox.com/about/maps/" target="_blank">© Mapbox</a> <a href="http://www.openstreetmap.org/about/" target="_blank">© OpenStreetMap</a> contributors'}
+);
+attribution: '© Mapbox © OpenStreetMap'
+const osmTile = L.tileLayer(
+  '//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  {attribution: '<a href="http://www.openstreetmap.org/about/" target="_blank">© OpenStreetMap</a> contributors'}
+);
 const baseMaps = {
     "OpenStreetMap": osmTile,
-    "Google Satellite": googleSat
+    "Mapbox Satellite": mapboxSat
 };
 
 const map = L.map('map', { layers: [osmTile] }).setView([51.505, -0.09], 13);

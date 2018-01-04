@@ -1,3 +1,7 @@
+## 1.0.1
+
+- Replace Google Satellite layer by Mapbox Satellite
+
 ## 1.0.0
 
 - New UI style enabled by Bulma
