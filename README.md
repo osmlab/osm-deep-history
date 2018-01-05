@@ -1,4 +1,4 @@
-# OSM Visual History
+# OSM Deep History
 
 A better way to view the history of objects in [OpenStreetMap](http://www.openstreetmap.org/).
 
