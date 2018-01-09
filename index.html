@@ -1,35 +1,65 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>OSM Deep History</title>
     <meta charset='utf-8' />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" />
-    <link rel='stylesheet' href='css/style.css' />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.0/css/bulma.min.css" />
+    <link rel='stylesheet' href='css/fixedtable.css' />
     <link rel='stylesheet' href='css/site.css' />
 </head>
+
 <body>
-    <div class='container'>
-        <div class='col12 pad1'>
-            <div class='col2'>
-                <select id='type'>
-                    <option value='node'>Node</option>
-                    <option value='way'>Way</option>
-                    <option value='relation'>Relation</option>
-                </select>
-            </div>
-            <div class='col2'>
-                <input id='id'/>
-            </div>
-            <div class='col1'>
-                <button id='go'>Get History</button>
+    <div class="hero is-primary is-small">
+        <div class="hero-body">
+            <div class="container">
+                <div class="columns is-vcentered">
+                    <div class="column is-5">
+                        <p class="title">OSM Deep History</p>
+                        <p class="subtitle">View history of objects in OpenStreetMap</p>
+                    </div>
+                    <div class='column'>
+                        <div class="field is-grouped">
+                            <div class="control">
+                                <div class="field has-addons">
+                                    <p class="control select is-small">
+                                        <select id='type'>
+                                            <option value='node'>Node</option>
+                                            <option value='way'>Way</option>
+                                            <option value='relation'>Relation</option>
+                                        </select>
+                                    </p>
+                                    <p class="control">
+                                        <input id="id" class="input is-small" type="number" placeholder="Object ID">
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="control">
+                                <button id="go" class="button is-primary is-inverted is-small">Get History</button>
+                            </div>
+                            <div class='control'>
+                                <button id='more' class='button is-info is-small' disabled>Show More</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <div id='map'>
+
+    <div id="main" class="columns is-variable is-0">
+        <div id='map' class='column is-parent is-5'>
+        </div>
+        <div id='history' class='column fixed-table-container content is-small'>
+        </div>
     </div>
-    <div id='history'>
-    </div>
+
+    <span id="error" class="tag is-danger is-hidden"></span>
+
     <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
     <script src='js/bundle.js'></script>
 </body>
+
 </html>

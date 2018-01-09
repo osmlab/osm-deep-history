@@ -1,27 +1,32 @@
 {
   "name": "osm-deep-history",
-  "version": "0.0.1",
-  "description": "display an OSM object's history",
+  "version": "1.0.2",
+  "description": "Display an OSM object's history",
   "main": "index.js",
   "scripts": {
-    "build": "./node_modules/.bin/browserify js/site.js > js/bundle.js",
-    "start": "./node_modules/.bin/beefy index.js:bundle.js 8080 --browserify=./node_modules/browserify/bin/cmd.js -- -d"
+    "build": "browserify -g uglifyify index.js > js/bundle.js",
+    "start": "budo index.js:js/bundle.js --live --open"
   },
   "repository": "git@github.com:iandees/osm-deep-history.git",
   "keywords": [
-    "openstreetmap"
+    "openstreetmap",
+    "gis"
   ],
   "author": "Ian Dees <ian.dees@gmail.com>",
+  "contributors": [
+    "Leo Liang <leoliang@gmail.com>",
+    "Wille Marcel <wille@wille.blog.br>"
+  ],
   "license": "BSD",
   "dependencies": {
-    "reqwest": "~2.0.5",
-    "through": "~2.3.1",
-    "qs": "~6.5.1",
+    "d3": "~4.10.2",
+    "lodash": "^4.17.4",
     "moment": "~2.18.1",
-    "d3": "~4.10.2"
+    "reqwest": "~2.0.5"
   },
   "devDependencies": {
-    "beefy": "2.1.8",
-    "browserify": "13.0.1"
+    "browserify": "13.0.1",
+    "budo": "^10.0.4",
+    "uglifyify": "^4.0.4"
   }
 }
