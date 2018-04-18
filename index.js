@@ -140,6 +140,34 @@ function row(field, title, formatter, tag) {
     };
 }
 
+function tagRow(tagName) {
+    return function (selection) {
+        let prev;
+        selection.append('td').attr('class', 'field').text(tagName);
+        selection
+            .selectAll('td.version')
+            .data(_.identity)
+            .enter()
+            .append('td')
+            .attr('class', function (d) {
+                const changeStatus = pClass(d.tags[tagName]);
+                return `${changeStatus} version_${d.version}`;
+            })
+            .text(function (d) {
+                return d.tags[tagName];
+            });
+
+        function pClass(val) {
+            try {
+                if (prev == val) return 'unchanged';
+                else if (!prev && val && val != prev) return 'added';
+                else if (prev && !val) return 'removed';
+                else if (val && prev != val) return 'changed';
+            } finally { prev = val; }
+        }
+    };
+}
+
 function userLink(d) {
     return '<a target="_blank" href="https://hdyc.neis-one.org/?' + d + '">' + d + '</a>';
 }
@@ -175,7 +203,7 @@ function showTable(object) {
         .html('&nbsp;');
 
     const tags = _.uniq(_.flatMap(object, o => _.keys(o.tags)));
-    _.forEach(tags.sort(), tag => tbody.append('tr').call(row(tag, tag, null, true)));
+    _.forEach(tags.sort(), tag => tbody.append('tr').call(tagRow(tag)));
 
     fixedTable(document.getElementById('history'));
 }
