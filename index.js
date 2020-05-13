@@ -173,7 +173,7 @@ function userLink(d) {
 }
 
 function changesetLink(d) {
-    return '<a target="_blank" href="https://osmcha.mapbox.com/changesets/' + d + '">' + d + '</a>';
+    return '<a target="_blank" href="https://osmcha.org/changesets/' + d + '">' + d + '</a>';
 }
 
 function showTable(object) {
