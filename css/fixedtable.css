@@ -1,6 +1,7 @@
 .fixed-table-container {
   box-sizing: border-box;
   border: 1px solid #ccc;
+  height: 90vh;
 }
 .fixed-table-container table {
   border-collapse: collapse;
