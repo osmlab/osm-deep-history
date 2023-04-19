@@ -43,9 +43,15 @@
   }
 }
 
+@media screen and (max-width: 769px) {
+  .fixed-table-container {
+    height: auto;
+  }
+}
+
 @media screen and (max-width: 444px) {
   .fixed-table-container {
-    height: calc(100vh - 165px);
+    /*height: calc(100vh - 165px);*/
   }
   .columns > .column > .field.is-grouped {
     flex-wrap: wrap;
@@ -70,6 +76,6 @@
     padding: 0 10px;
   }
   .fixed-table-container {
-    height: calc(100vh - 185px);
+    /*height: calc(100vh - 185px);*/
   }
 }
