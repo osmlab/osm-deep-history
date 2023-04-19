@@ -31,8 +31,10 @@
                                             <option value='relation'>Relation</option>
                                         </select>
                                     </p>
-                                    <p class="control">
+                                    <p class="control relative">
+                                        <span id="error" class="tag is-danger is-hidden"></span>
                                         <input id="id" class="input is-small" type="number" placeholder="Object ID">
+
                                     </p>
                                 </div>
                             </div>
@@ -42,6 +44,7 @@
                             <div class='control'>
                                 <button id='more' class='button is-info is-small' disabled>Show More</button>
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -53,10 +56,10 @@
         <div id='map' class='column is-parent is-5'>
         </div>
         <div id='history' class='column fixed-table-container content is-small'>
+
         </div>
     </div>
 
-    <span id="error" class="tag is-danger is-hidden"></span>
 
     <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
     <script src='js/bundle.js'></script>

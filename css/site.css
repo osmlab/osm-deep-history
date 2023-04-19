@@ -46,3 +46,22 @@ body {
     height: 1.4em;
     padding-top: 0;
 }
+#moreVersion {
+    margin-left: 5px;
+    padding-bottom: 0;
+}
+.hide {
+    visibility: hidden;
+}
+.relative {
+    position: relative;
+}
+#error {
+    position: absolute;
+    z-index: 1;
+    top: 100%;
+    margin-top: 5px;
+}
+#error:empty {
+    display: none;
+}
