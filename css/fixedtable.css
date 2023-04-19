@@ -50,9 +50,6 @@
 }
 
 @media screen and (max-width: 444px) {
-  .fixed-table-container {
-    /*height: calc(100vh - 165px);*/
-  }
   .columns > .column > .field.is-grouped {
     flex-wrap: wrap;
   }
@@ -74,8 +71,5 @@
 @media screen and (max-width: 360px) {
   .hero-body {
     padding: 0 10px;
-  }
-  .fixed-table-container {
-    /*height: calc(100vh - 185px);*/
   }
 }
