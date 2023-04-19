@@ -1,7 +1,7 @@
 .fixed-table-container {
   box-sizing: border-box;
-  border: 1px solid #ccc;
-  height: 90vh;
+  height: calc(100vh - 97px);
+  padding: 0;
 }
 .fixed-table-container table {
   border-collapse: collapse;
@@ -30,4 +30,46 @@
 }
 .fixed-table-container td:first-child {
   background: #eee;
+}
+@media screen and (max-width: 1008px) {
+  .fixed-table-container {
+    height: calc(100vh - 122px);
+  }
+}
+
+@media screen and (max-width: 774px) {
+  .fixed-table-container {
+    height: calc(100vh - 148px);
+  }
+}
+
+@media screen and (max-width: 444px) {
+  .fixed-table-container {
+    height: calc(100vh - 165px);
+  }
+  .columns > .column > .field.is-grouped {
+    flex-wrap: wrap;
+  }
+  .field.is-grouped .control{
+    margin-bottom: 10px;
+  }
+  .hero-body .title{
+    font-size: 1.5rem;
+  }
+
+  .hero-body .subtitle{
+    font-size: 1rem;
+  }
+  .hero-body .column {
+    padding: 0.5em;
+  }
+}
+
+@media screen and (max-width: 360px) {
+  .hero-body {
+    padding: 0 10px;
+  }
+  .fixed-table-container {
+    height: calc(100vh - 185px);
+  }
 }
