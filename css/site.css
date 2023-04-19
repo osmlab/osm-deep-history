@@ -59,8 +59,7 @@ body {
 #error {
     position: absolute;
     z-index: 1;
-    top: 100%;
-    margin-top: 5px;
+    bottom: 120%;
 }
 #error:empty {
     display: none;
