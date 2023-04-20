@@ -8,8 +8,21 @@ body {
     overflow: hidden;
 }
 
+@media screen and (max-width: 769px) {
+    html {
+        overflow: auto;
+    }
+    body {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        overflow: auto;
+    }
+}
+
 #main {
     flex: 1;
+    margin-bottom: 0;
 }
 
 #map {
@@ -45,4 +58,22 @@ body {
     font-size: .7rem;
     height: 1.4em;
     padding-top: 0;
+}
+#moreVersion {
+    margin-left: 5px;
+    padding-bottom: 0;
+}
+.hide {
+    visibility: hidden;
+}
+.relative {
+    position: relative;
+}
+#error {
+    position: absolute;
+    z-index: 1;
+    bottom: 120%;
+}
+#error:empty {
+    display: none;
 }
