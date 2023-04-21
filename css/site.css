@@ -59,9 +59,13 @@ body {
     height: 1.4em;
     padding-top: 0;
 }
+.field {
+    display: flex;
+}
 #moreVersion {
-    margin-left: 5px;
+    margin-left: auto;
     padding-bottom: 0;
+    background-color: #99fc99;
 }
 .hide {
     visibility: hidden;

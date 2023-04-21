@@ -22,6 +22,10 @@ L.control.layers(baseMaps).addTo(map);
 
 const overlays = L.featureGroup([]).addTo(map);
 
+let START_LOAD = 20;
+let arrayObjects = [];
+
+
 d3.select(window).on('load', function () {
     var hash = document.location.hash;
     if (hash) {
@@ -83,13 +87,25 @@ function clickGo() {
 function clear() {
     d3.select('#history table').remove();
     overlays.clearLayers();
+    arrayObjects = [];
     mapStatusChanged({showMap: false, more: false});
 }
 
 function show(object, more) {
+    arrayObjects = object;
     if (!more) {
-        showTable(object);
+        if (arrayObjects.length > START_LOAD) {
+            let objectSlice = arrayObjects.slice(-(START_LOAD));
+            showTable(objectSlice);
+
+        } else {
+            showTable(object);
+            hideButtonVersion();
+        }
+        var moreVersion = document.getElementById("moreVersion")
+        moreVersion.addEventListener('click', loadVersions);
     };
+
     showMap(object, more)
         .then(mapStatusChanged)
         .catch(console.log);
@@ -108,12 +124,27 @@ function showMap(object, more) /* => Promise<Status> */ {
             return Promise.resolve({ showMap: false, more: false });
     }
 }
+function loadVersions() {
+    d3.select('#history table').remove();
+    showTable(arrayObjects)
+    hideButtonVersion();
+}
+function hideButtonVersion() {
+    const button = document.getElementById("moreVersion")
+    button.classList.add('hide');
+}
+
+
 
 function row(field, title, formatter, tag) {
     return function (selection) {
         let prev;
         const element = (field === 'version') ? 'th' : 'td';
-        selection.append(element).attr('class', 'field').text(title || field);
+        if (field === 'version') {
+            selection.append(element).attr('class', 'field').text(title || field).html(`Version <button class="button is-tiny" id="moreVersion">Show all</button>`)
+        }else {
+            selection.append(element).attr('class', 'field').text(title || field)
+        }
         selection
             .selectAll('td.version')
             .data(_.identity)
