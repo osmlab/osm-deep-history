@@ -9,7 +9,7 @@ const mapboxSat = L.tileLayer(
 );
 attribution: '© Mapbox © OpenStreetMap'
 const osmTile = L.tileLayer(
-  '//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  '//tile.openstreetmap.org/{z}/{x}/{y}.png',
   {attribution: '<a href="http://www.openstreetmap.org/about/" target="_blank">© OpenStreetMap</a> contributors'}
 );
 const baseMaps = {
